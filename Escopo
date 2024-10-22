@@ -19,6 +19,7 @@ class __funcionario(Locadora)
 
 
 class jogo(locadora)
+	Plataforma
 	Disponibilidade
 	midia_type
 	genero
