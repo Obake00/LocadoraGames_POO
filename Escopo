@@ -1,0 +1,38 @@
+locadora de games modelo fisico
+
+class Locadora() 
+	__init__
+	
+
+class Clientes
+	nome
+	idade
+	
+
+class __funcionario(Locadora)
+	nome
+	idade
+	endereço
+	turno
+	id funcionario
+	
+
+
+class jogo(locadora)
+	Disponibilidade
+	midia_type
+	genero
+	classificação
+	distribuidora
+	avaliação
+	preço
+	
+
+def locar()
+
+def devolver()
+
+def consultar()
+
+
+
