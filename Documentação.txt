@@ -2,12 +2,12 @@ Documentação:
 
 1-UML:
 Entidades e atributos:
-
+	
 Entidade: Cliente...............(tabela referente totos o dados do cliente)
 Atributos: 1- Cpf...............(Indentificador unico / PK)
            2- Nome..............(P.Nome=Primeiro nome / S.nome=Sobrenome do cliente)
            3- Data_nascimento...(Data de nascimento do cliente)
-
+		   
 Entidade: Jogo.................(Tabela referente a todos os dados do jogo)
 Atributos: 1- Id_jogo..........(Indentificador unico / PK)
            2- Titulo...........(Titulo / nome do jogo)
@@ -18,18 +18,19 @@ Atributos: 1- Id_jogo..........(Indentificador unico / PK)
            7- Desenvolvedora...(Empresa responsavel pela produção do jogo)
            8- Preço............(Valor estipulado pela locadora para a locação)
            9- Estado_aluguel...(Estado de disponibilidade do jogo na loja)
-
+			
 Entidade: Funcionario...........(Tabela referente a todos os dados dos Funcionarios)
 Atributos: 1- Id_func..........(Identificador unico / PK)
-	   2- Nome.............(P.Nome=Primeiro nome / S.nome=Sobrenome do funcionario)
-	   3- Turno............(Periodo no qual o funcionario trabalha na loja)
+           2- Nome.............(P.Nome=Primeiro nome / S.nome=Sobrenome do funcionario)
+           3- Turno............(Periodo no qual o funcionario trabalha na loja)
            4- Data_nascimento..(Data de nascimento do funcionario)
-           5- Endereço.........(CEP de residencia do funcionario)
-           6- Comissão.........(Valor de comissão que o funcionario recebe encima de cada aluguel feito por jogo "0.10*preço_jogo")
 
+			
 Entidade: Pedido................(Tabela referente ao dados de locação e devolução dos jogos)
 Atributos: 1- Id_pedido.........(Identificador unico / PK)
-           2- Id_cpf............(Idenfificador composto vindo do cliente / FK)
-           3- Id_jogo...........(Identificador composto vindo do jogo / FK)
-           4- Valor.............(Calculo realizado com base no valor do jogo e o total de diarias de locação)
-           5- Datas.............(Locação = Data de saida do jogo na locadora / Devolução = Data de retorno do jogo na locadora)
+           2- Datas.............(Locação = Data de saida do jogo na locadora / Devolução = Data de retorno do jogo na locadora)
+
+
+Relacionamentos:
+           1- ATENDE............(Ligação entre as entidades: "Cliente" e "Funcionario") Cardinalidade..(N - 1)
+           2- RESERVA...........(Ligação entre "Cliente", "Pedido" e "Jogo") Cardinalidade ..(N - N)
