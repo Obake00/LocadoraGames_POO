@@ -1,3 +1,6 @@
+#Caso nao ter o alchemy na maquina, fazer a instalação primeiro pelo bash
+#"pip install sqlalchemy"
+
 from sqlalchemy import create_engine, Column, Integer, Float, String, Date, Boolean, ForeignKey
 from sqlalchemy.orm import sessionmaker, declarative_base
 
