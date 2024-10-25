@@ -1,32 +1,34 @@
 from sqlalchemy import create_engine, Column, Integer, Float, String, Date, Boolean, ForeignKey
 from sqlalchemy.orm import sessionmaker, declarative_base
 
-db = create_engine('sqlite:///locadora.db')                                 # Criando o banco e alocando em uma variavel
+
+db = create_engine("sqlite:///locadora.db")                                 # Criando o banco e alocando em uma variavel
 Session = sessionmaker(bind=db)                                             # Funciona como um "Commit"
 session = Session()                                                         # Faz as alterações no banco
 
 Base = declarative_base()                                                   # Cria o banco
 
 class Cliente(Base):                                                        # Tabelas do banco
-    __tabblename__ = 'clientes'
+    __tablename__ = 'clientes'
 
-    cpf = Column("cpf", Integer, primary_key=True, autoincrement=True)
+    cpf = Column("cpf", Integer, primary_key=True)
     nome = Column("nome", String)
     data_nascimento = Column("data_nascimento", Date)
     atendido = Column("atendido_por", ForeignKey("funcionarios.id_func"))
 
-    def __init__(self,nome,data_nascimento,atendido):
+    def __init__(self,cpf,nome,data_nascimento,atendido):
+        self.cpf = cpf
         self.nome = nome
         self.data_nascimento = data_nascimento
         self.atendido = atendido
 
 
 class Jogo(Base):
-    __tabblename__ = 'jogos'
+    __tablename__ = 'jogos'
 
     id_jogo = Column("Id_jogo", Integer, primary_key=True, autoincrement=True)
     titulo = Column("titulo", String)
-    estado_fisico = Column("estado_fisico", String)
+    modelo_fisico = Column("modelo_fisico", String)
     sistema = Column("sistema", String)
     classificacao = Column("classificação", String)
     genero = Column("genero", String)
@@ -34,10 +36,10 @@ class Jogo(Base):
     preco = Column("estado_fisico", Float)
     estado_aluguel = Column("estado_aluguel", Boolean)
 
-    def __init__(self,id_jogo,titulo,estado_fisico,sistema,classificacao,genero,desenvolvedora,preco,estado_aluguel=True):
-        self.id_jogo = id_jogo
+    def __init__(self,titulo,modelo_fisico,sistema,classificacao,genero,desenvolvedora,preco,estado_aluguel=True):
+        
         self.titulo = titulo
-        self.estado_fisico = estado_fisico
+        self.modelo_fisico = modelo_fisico
         self.sistema = sistema
         self.classificacao = classificacao
         self.genero = genero
@@ -47,58 +49,44 @@ class Jogo(Base):
 
 
 class Funcionario(Base):
-    __tabblename__ = 'funcionarios'
+    __tablename__ = 'funcionarios'
 
     id_func = Column("id_func", Integer, primary_key=True, autoincrement=True)
     nome = Column("nome", String)
     turno = Column("turno", String)
     data_nascimento = Column("data_nascimento", Date)
 
-    def __init__(self,id_func,nome,turno,data_nascimento):
-        
-        self.id_func = id_func
+    def __init__(self,nome,turno,data_nascimento):
+
         self.nome = nome
         self.turno = turno
         self.data_nascimento = data_nascimento
 
 class Pedido(Base):
-    __tabblename__ = 'pedidos'
+    __tablename__ = 'pedidos'
 
     id_pedido = Column("id_pedido", Integer, primary_key=True, autoincrement=True)
     locacao = Column("locação", Date)
     devolucao = Column("devolução", Date)
 
-    def __init__(self,id_pedido,locacao,devolucao):
-        self.id_pedido = id_pedido
+    def __init__(self,locacao,devolucao):
+        
         self.locacao = locacao
         self.devolucao = devolucao
 
 
 class Endereco(Base):
-    __tabblename__ = 'enderecos'
+    __tablename__ = 'enderecos'
 
-    cep = Column("cep", Integer, primary_key=True, autoincrement=True)
-    fucnionario = Column("funcionario", ForeignKey("funcionarios.id_func"))
+    cep = Column("cep", Integer, primary_key=True)
+    funcionario = Column("funcionario", ForeignKey("funcionarios.id_func"))
 
     def __init__(self,cep,funcionario):
         self.cep = cep
         self.fucnionario = funcionario
 
-class Reserva(Base):
-    __tabblename__ = 'reservas'
 
-    id_reserva = Column("id_reserva", Integer, primary_key=True, autoincrement=True)
-    valor = Column("valor", float)
-    cfp_id = Column("cpf_id", ForeignKey("clientes.cpf"))
-    pedido_id = Column("pedido_id", ForeignKey("pedidos.id_pedido"))
-    jogo_id = Column("jogo_id", ForeignKey("jogos.id_jogo"))
 
-    def __init__(self,id_reserva,valor,cpf_id,pedido_id,jogo_id):
-        self.id_reserva = id_reserva
-        self.valor = valor
-        self.cpf_id = cpf_id
-        self.pedido_id = pedido_id
-        self.jogo_id = jogo_id
 
 
 
