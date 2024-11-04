@@ -30,10 +30,10 @@ class Jogo(Base):
     titulo = Column("titulo", String)
     modelo_fisico = Column("modelo_fisico", String)
     sistema = Column("sistema", String)
-    classificacao = Column("classificação", String)
+    classi = Column("classificação", Integer)
     genero = Column("genero", String)
-    desenvolvedora = Column("desenvolvedora", String)
-    preco = Column("estado_fisico", Float)
+    desenv = Column("desenvolvedora", String)
+    preco = Column("preço", Float)
     estado_aluguel = Column("estado_aluguel", Boolean)
 
     def __init__(self,titulo,modelo_fisico,sistema,classificacao,genero,desenvolvedora,preco,estado_aluguel=True):
@@ -41,9 +41,9 @@ class Jogo(Base):
         self.titulo = titulo
         self.modelo_fisico = modelo_fisico
         self.sistema = sistema
-        self.classificacao = classificacao
+        self.classi = classificacao
         self.genero = genero
-        self.desenvolvedora = desenvolvedora
+        self.desenv = desenvolvedora
         self.preco = preco
         self.estado_aluguel = estado_aluguel
 
@@ -91,3 +91,21 @@ class Endereco(Base):
 
 
 Base.metadata.create_all(bind=db)                                           # Cria tudo dentro do banco criado
+
+# funçoes
+
+def add_jogo(titulo,modelo_fisico,sistema,classi,genero,desenv,preco):
+    jogo = session.query(Jogo)
+
+
+
+
+# def main():
+
+#     while True:
+#         print("LOCADORA")
+#         print(20*"=")
+#         print("Listar Jogos tecle [1]")
+
+#         opcao = input("Opção: ")
+#         if opcao == '1':
