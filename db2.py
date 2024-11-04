@@ -10,8 +10,6 @@ Session = sessionmaker(bind=db)                                             # Fu
 session = Session()                                                         # Faz as alterações no banco
 
 Base = declarative_base()                                                   # Cria o banco
-
-class
     
 class Cliente(Base):                                                        # Tabelas do banco
     __tablename__ = 'clientes'
@@ -96,3 +94,5 @@ class Endereco(Base):
 
 
 Base.metadata.create_all(bind=db)                                           # Cria tudo dentro do banco criado
+
+#CRUD
