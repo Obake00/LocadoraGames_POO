@@ -156,7 +156,7 @@ def main():
         print("[1] - Pratelheira de jogos")
         print("[2] - Adicionar Jogo")
         print("[3] - Adicionar Cliente")
-        print("[5] - Encerrar Sistema")
+        print("[0] - Encerrar Sistema")
         print(13*"-=-")
 
         opcao = input("DIGITE OPÇÃO: ")
@@ -166,7 +166,7 @@ def main():
             add_jogo()
         elif opcao == "3":
             add_cliente()
-        elif opcao == "5":
+        elif opcao == "0":
             print("Finalizando operação..\nOBRIGADO")
             break
         else:
