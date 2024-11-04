@@ -125,4 +125,24 @@ def add_jogo():
     print(f"O jogo '{titulo}' foi adicionado com sucesso!")
 
 # Exemplo de uso
-add_jogo()
+
+
+
+def main():
+    while True:
+        print("LOCADORA")
+        print(20*"=")
+        print("Adicionar jogo tecle [1]")
+        print("Encerrar Sistema tecle [5]")
+
+        opcao = input("Digite Opção: ")
+        if opcao == "1":
+            add_jogo()
+        elif opcao == "5":
+            print("Finalizando operação..\nOBRIGADO")
+            break
+        else:
+            print("Opção Invalida erro 202")
+
+if __name__ == "__main__":
+    main()
