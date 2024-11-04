@@ -1,7 +1,7 @@
 #Caso nao ter o alchemy na maquina, fazer a instalação primeiro pelo bash
 #"pip install sqlalchemy"
 
-from sqlalchemy import create_engine, Column, Integer, Float, String, Date, Boolean, ForeignKey
+from sqlalchemy import create_engine, Column, Integer, Float, String, Boolean, Date, ForeignKey
 from sqlalchemy.orm import sessionmaker, declarative_base
 
 
@@ -14,30 +14,30 @@ Base = declarative_base()                                                   # Cr
 class Cliente(Base):                                                        # Tabelas do banco
     __tablename__ = 'clientes'
 
-    cpf = Column("cpf", Integer, primary_key=True)
-    nome = Column("nome", String)
-    data_nascimento = Column("data_nascimento", Date)
-    atendido = Column("atendido_por", ForeignKey("funcionarios.id_func"))
+    cpf = Column("CPF", Integer, primary_key=True)
+    nome = Column("Nome", String)
+    idade = Column("Idade", Integer)
+    # atendido = Column("Atendido_por", ForeignKey("funcionarios.id_func"))
 
-    def __init__(self,cpf,nome,data_nascimento,atendido):
+    def __init__(self,cpf,nome,idade):
         self.cpf = cpf
         self.nome = nome
-        self.data_nascimento = data_nascimento
-        self.atendido = atendido
+        self.idade = idade
+        # self.atendido = atendido
 
 
 class Jogo(Base):
     __tablename__ = 'jogos'
 
     id_jogo = Column("Id_jogo", Integer, primary_key=True, autoincrement=True)
-    titulo = Column("titulo", String)
-    modelo_fisico = Column("modelo_fisico", String)
-    sistema = Column("sistema", String)
-    classi = Column("classificação", Integer)
-    genero = Column("genero", String)
-    desenv = Column("desenvolvedora", String)
-    preco = Column("preço", Float)
-    estado_aluguel = Column("estado_aluguel", Boolean)
+    titulo = Column("Titulo", String)
+    modelo_fisico = Column("Modelo_fisico", String)
+    sistema = Column("Sistema", String)
+    classi = Column("Classificação", Integer)
+    genero = Column("Genero", String)
+    desenv = Column("Desenvolvedora", String)
+    preco = Column("Preço", Float)
+    estado_aluguel = Column("Estado_aluguel", Boolean)
 
     def __init__(self,titulo,modelo_fisico,sistema,classificacao,genero,desenvolvedora,preco,estado_aluguel=True):
         
@@ -55,9 +55,9 @@ class Funcionario(Base):
     __tablename__ = 'funcionarios'
 
     id_func = Column("id_func", Integer, primary_key=True, autoincrement=True)
-    nome = Column("nome", String)
-    turno = Column("turno", String)
-    data_nascimento = Column("data_nascimento", Date)
+    nome = Column("Nome", String)
+    turno = Column("Turno", String)
+    idade = Column("Idade", Integer)
 
     def __init__(self,nome,turno,data_nascimento):
 
@@ -68,9 +68,9 @@ class Funcionario(Base):
 class Pedido(Base):
     __tablename__ = 'pedidos'
 
-    id_pedido = Column("id_pedido", Integer, primary_key=True, autoincrement=True)
-    locacao = Column("locação", Date)
-    devolucao = Column("devolução", Date)
+    id_pedido = Column("Id_pedido", Integer, primary_key=True, autoincrement=True)
+    locacao = Column("Locação", Date)
+    devolucao = Column("Devolução", Date)
 
     def __init__(self,locacao,devolucao):
         
@@ -81,8 +81,8 @@ class Pedido(Base):
 class Endereco(Base):
     __tablename__ = 'enderecos'
 
-    cep = Column("cep", Integer, primary_key=True)
-    funcionario = Column("funcionario", ForeignKey("funcionarios.id_func"))
+    cep = Column("Cep", Integer, primary_key=True)
+    funcionario = Column("Funcionario", ForeignKey("funcionarios.id_func"))
 
     def __init__(self,cep,funcionario):
         self.cep = cep
@@ -131,13 +131,31 @@ def prateleira():
             print(f"{jogo.titulo} - {jogo.sistema}")
 
 
+def add_cliente():
+    cpf = int(input("Digite o CPF do CLiente: "))
+    nome = input("Digite o nome: ")
+    idade = int(input("Digite ano de nascimento "))
+
+    novo_cliente = Cliente(
+        cpf=cpf,
+        nome=nome,
+        idade=idade
+    )
+    session.add(novo_cliente)
+    session.commit()
+
+    print(f"Cliente {nome} adicionado ao sistema!")
+
+
+
 
 def main():
     while True:
         print(f"{10*'-='} L O C A D O R A {10*'=-'}")
         print(19*"-=-")
         print("[1] - Pratelheira de jogos")
-        print("[2] - Adicionar jogo")
+        print("[2] - Adicionar Jogo")
+        print("[3] - Adicionar Cliente")
         print("[5] - Encerrar Sistema")
         print(13*"-=-")
 
@@ -146,6 +164,8 @@ def main():
             prateleira()
         elif opcao == "2":
             add_jogo()
+        elif opcao == "3":
+            add_cliente()
         elif opcao == "5":
             print("Finalizando operação..\nOBRIGADO")
             break
