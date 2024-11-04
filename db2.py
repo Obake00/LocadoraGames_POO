@@ -11,7 +11,8 @@ session = Session()                                                         # Fa
 
 Base = declarative_base()                                                   # Cria o banco
 
-class 
+class
+    
 class Cliente(Base):                                                        # Tabelas do banco
     __tablename__ = 'clientes'
 
