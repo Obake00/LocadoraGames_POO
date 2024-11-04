@@ -1,3 +1,6 @@
+#Caso nao ter o alchemy na maquina, fazer a instalação primeiro pelo bash
+#"pip install sqlalchemy"
+
 from sqlalchemy import create_engine, Column, Integer, Float, String, Date, Boolean, ForeignKey
 from sqlalchemy.orm import sessionmaker, declarative_base
 
@@ -8,6 +11,8 @@ session = Session()                                                         # Fa
 
 Base = declarative_base()                                                   # Cria o banco
 
+class
+    
 class Cliente(Base):                                                        # Tabelas do banco
     __tablename__ = 'clientes'
 
@@ -91,21 +96,3 @@ class Endereco(Base):
 
 
 Base.metadata.create_all(bind=db)                                           # Cria tudo dentro do banco criado
-
-# funçoes
-
-def add_jogo(titulo,modelo_fisico,sistema,classi,genero,desenv,preco):
-    jogo = session.query(Jogo)
-
-
-
-
-# def main():
-
-#     while True:
-#         print("LOCADORA")
-#         print(20*"=")
-#         print("Listar Jogos tecle [1]")
-
-#         opcao = input("Opção: ")
-#         if opcao == '1':
