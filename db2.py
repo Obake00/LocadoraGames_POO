@@ -96,3 +96,33 @@ class Endereco(Base):
 Base.metadata.create_all(bind=db)                                           # Cria tudo dentro do banco criado
 
 #CRUD
+
+def add_jogo():
+    # Solicitar informações do jogo ao usuário
+    titulo = input("Digite o título do jogo: ")
+    modelo_fisico = input("Digite o modelo físico do jogo: ")
+    sistema = input("Digite o sistema do jogo: ")
+    classificacao = int(input("Digite a classificação do jogo (idade): "))
+    genero = input("Digite o gênero do jogo: ")
+    desenvolvedora = input("Digite a desenvolvedora do jogo: ")
+    preco = float(input("Digite o preço do jogo: "))
+
+    # Criar uma instância do jogo
+    novo_jogo = Jogo(
+        titulo=titulo,
+        modelo_fisico=modelo_fisico,
+        sistema=sistema,
+        classificacao=classificacao,
+        genero=genero,
+        desenvolvedora=desenvolvedora,
+        preco=preco
+    )
+
+    # Adicionar o novo jogo à sessão e confirmar a transação
+    session.add(novo_jogo)
+    session.commit()
+
+    print(f"O jogo '{titulo}' foi adicionado com sucesso!")
+
+# Exemplo de uso
+add_jogo()
