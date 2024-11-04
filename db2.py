@@ -147,6 +147,16 @@ def add_cliente():
     print(f"Cliente {nome} adicionado ao sistema!")
 
 
+def listar_clientes():
+    clientes = session.query(Cliente).all()
+    if len(clientes) == 0:
+        print("Não a clientes no Sistema!!")
+    else:
+        print(f"Total de Clientes no Sistema {len(clientes)}")
+        for cliente in clientes:
+            print(f"{cliente.nome}")
+
+
 
 
 def main():
@@ -156,6 +166,7 @@ def main():
         print("[1] - Pratelheira de jogos")
         print("[2] - Adicionar Jogo")
         print("[3] - Adicionar Cliente")
+        print("[4] - Clientes no Sistema")
         print("[0] - Encerrar Sistema")
         print(13*"-=-")
 
@@ -166,6 +177,8 @@ def main():
             add_jogo()
         elif opcao == "3":
             add_cliente()
+        elif opcao =="4":
+            listar_clientes()    
         elif opcao == "0":
             print("Finalizando operação..\nOBRIGADO")
             break
