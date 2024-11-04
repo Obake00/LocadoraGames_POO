@@ -98,7 +98,6 @@ Base.metadata.create_all(bind=db)                                           # Cr
 #CRUD
 
 def add_jogo():
-    # Solicitar informações do jogo ao usuário
     titulo = input("Digite o título do jogo: ")
     modelo_fisico = input("Digite o modelo físico do jogo: ")
     sistema = input("Digite o sistema do jogo: ")
@@ -107,7 +106,6 @@ def add_jogo():
     desenvolvedora = input("Digite a desenvolvedora do jogo: ")
     preco = float(input("Digite o preço do jogo: "))
 
-    # Criar uma instância do jogo
     novo_jogo = Jogo(
         titulo=titulo,
         modelo_fisico=modelo_fisico,
@@ -117,26 +115,36 @@ def add_jogo():
         desenvolvedora=desenvolvedora,
         preco=preco
     )
-
-    # Adicionar o novo jogo à sessão e confirmar a transação
     session.add(novo_jogo)
     session.commit()
 
-    print(f"O jogo '{titulo}' foi adicionado com sucesso!")
+    print(f"O jogo '{titulo}' foi adicionado a estante!")
 
-# Exemplo de uso
+
+def prateleira():
+    jogos = session.query(Jogo).all()
+    if len(jogos) == 0:
+        print("Não a jogos na prateleira!!")
+    else:
+        print(f"Total de jogos na prateleira {len(jogos)}")
+        for jogo in jogos:
+            print(f"{jogo.titulo} - {jogo.sistema}")
 
 
 
 def main():
     while True:
-        print("LOCADORA")
-        print(20*"=")
-        print("Adicionar jogo tecle [1]")
-        print("Encerrar Sistema tecle [5]")
+        print(f"{10*'-='} L O C A D O R A {10*'=-'}")
+        print(19*"-=-")
+        print("[1] - Pratelheira de jogos")
+        print("[2] - Adicionar jogo")
+        print("[5] - Encerrar Sistema")
+        print(13*"-=-")
 
-        opcao = input("Digite Opção: ")
+        opcao = input("DIGITE OPÇÃO: ")
         if opcao == "1":
+            prateleira()
+        elif opcao == "2":
             add_jogo()
         elif opcao == "5":
             print("Finalizando operação..\nOBRIGADO")
