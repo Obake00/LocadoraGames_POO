@@ -3,7 +3,8 @@
 
 from sqlalchemy import create_engine, Column, Integer, Float, String, Boolean, Date, ForeignKey
 from sqlalchemy.orm import sessionmaker, declarative_base
-
+import os
+from time import sleep
 
 db = create_engine("sqlite:///locadora.db")                                 # Criando o banco e alocando em uma variavel
 Session = sessionmaker(bind=db)                                             # Funciona como um "Commit"
@@ -16,6 +17,7 @@ class Cliente(Base):                                                        # Ta
 
     cpf = Column("CPF", Integer, primary_key=True)
     nome = Column("Nome", String)
+    sexo = Column("Sexo", String)
     idade = Column("Idade", Integer)
     # atendido = Column("Atendido_por", ForeignKey("funcionarios.id_func"))
 
@@ -98,12 +100,12 @@ Base.metadata.create_all(bind=db)                                           # Cr
 #CRUD
 
 def add_jogo():
-    titulo = input("Digite o título do jogo: ")
-    modelo_fisico = input("Digite o modelo físico do jogo: ")
-    sistema = input("Digite o sistema do jogo: ")
+    titulo = input("Digite o título do jogo: ").capitalize()
+    modelo_fisico = input("Digite o modelo físico do jogo: ").capitalize()
+    sistema = input("Digite o sistema do jogo: ").capitalize()
     classificacao = int(input("Digite a classificação do jogo (idade): "))
-    genero = input("Digite o gênero do jogo: ")
-    desenvolvedora = input("Digite a desenvolvedora do jogo: ")
+    genero = input("Digite o gênero do jogo: ").capitalize()
+    desenvolvedora = input("Digite a desenvolvedora do jogo: ").capitalize()
     preco = float(input("Digite o preço do jogo: "))
 
     novo_jogo = Jogo(
@@ -118,33 +120,67 @@ def add_jogo():
     session.add(novo_jogo)
     session.commit()
 
+    print("Processando. . .")
+    sleep(2)
     print(f"O jogo '{titulo}' foi adicionado a estante!")
+    os.system('pause')
 
 
 def prateleira():
     jogos = session.query(Jogo).all()
     if len(jogos) == 0:
+        print("Processando. . .")
+        sleep(2)
+        print(f"{'-'*56}")
         print("Não a jogos na prateleira!!")
+        os.system('pause')
     else:
-        print(f"Total de jogos na prateleira {len(jogos)}")
+        print("Processando. . .")
+        sleep(2)
+        print(f"Total de jogos na prateleira:   {len(jogos)}")
+        print("Processando. . .")
+        sleep(2)
+        print("-"*56)
+    
         for jogo in jogos:
-            print(f"{jogo.titulo} - {jogo.sistema}")
+            print(f"- {jogo.titulo} -> {jogo.sistema}")
+
+    os.system('pause')    
 
 
 def add_cliente():
-    cpf = int(input("Digite o CPF do CLiente: "))
-    nome = input("Digite o nome: ")
-    idade = int(input("Digite ano de nascimento "))
+    while True:
+        cpf = input("Digite o CPF do Cliente (11 dígitos): ")
+        
+        if cpf.isdigit() and len(cpf) == 11:
+            cpf = int(cpf)
+            nome = input("Digite o nome: ").capitalize()
+            sexo = input("Digite o sexo: ").capitalize()
+            
+            while True:
+                idade = input("Digite a idade: ")
+                if idade.isdigit():
+                    idade = int(idade)
+                    break
+                else:
+                    print(f"Erro Idade inválida! Por favor, insira um número inteiro.")
+            
+            novo_cliente = Cliente(
+                cpf=cpf,
+                nome=nome,
+                sexo=sexo,
+                idade=idade
+            )
+            session.add(novo_cliente)
+            session.commit()
 
-    novo_cliente = Cliente(
-        cpf=cpf,
-        nome=nome,
-        idade=idade
-    )
-    session.add(novo_cliente)
-    session.commit()
-
-    print(f"Cliente {nome} adicionado ao sistema!")
+            print("Processando. . .")
+            sleep(2)
+            print(f"Cliente {nome} adicionado ao sistema!")
+            break
+        else:
+            print("CPF inválido! O CPF deve conter 11 dígitos, somente números.")
+    os.system('pause')
 
 
 def listar_clientes():
@@ -153,8 +189,10 @@ def listar_clientes():
         print("Não a clientes no Sistema!!")
     else:
         print(f"Total de Clientes no Sistema {len(clientes)}")
+        print("-"*56)
         for cliente in clientes:
-            print(f"{cliente.nome}")
+            print(f"- {cliente.nome}")
+        os.system('pause')
 
 
 
@@ -180,10 +218,12 @@ def main():
         elif opcao =="4":
             listar_clientes()    
         elif opcao == "0":
-            print("Finalizando operação..\nOBRIGADO")
+            print("Finalizando operação. . .")
+            sleep(3)
+            print(f"{10*'-='}  OBRIGADO  {10*'=-'}")
             break
         else:
-            print("Opção Invalida erro 202")
+            print(f"Opção Invalida erro 202")
 
 if __name__ == "__main__":
     main()
