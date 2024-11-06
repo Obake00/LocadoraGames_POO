@@ -195,6 +195,20 @@ def listar_clientes():
         os.system('pause')
 
 
+def del_cliente():
+    cpf = input("CPF do Cliente a ser deletado (11 dígitos): ")
+    
+    if cpf.isdigit() and len(cpf) == 11:
+        cliente = session.query(Cliente).filter_by(cpf=int(cpf)).first()
+        
+        if cliente:
+            session.delete(cliente)
+            session.commit()
+            print(f"Cliente {cliente.nome} deletado com sucesso!")
+        else:
+            print("Cliente não encontrado!")
+    else:
+        print("CPF inválido! O CPF deve ter exatamente 11 dígitos e ser um número.")
 
 
 def main():
@@ -205,6 +219,7 @@ def main():
         print("[2] - Adicionar Jogo")
         print("[3] - Adicionar Cliente")
         print("[4] - Clientes no Sistema")
+        print("[5] - Excluir Cliente")
         print("[0] - Encerrar Sistema")
         print(13*"-=-")
 
@@ -215,8 +230,10 @@ def main():
             add_jogo()
         elif opcao == "3":
             add_cliente()
-        elif opcao =="4":
-            listar_clientes()    
+        elif opcao == "4":
+            listar_clientes()
+        elif opcao == "5":
+            del_cliente()    
         elif opcao == "0":
             print("Finalizando operação. . .")
             sleep(3)
