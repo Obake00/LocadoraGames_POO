@@ -1,4 +1,4 @@
-# Instalando o Alchemy na maquina
+# Instalando o Alchemy na máquina
 # "pip install sqlalchemy"
 
 from sqlalchemy import create_engine, Column, Integer, Float, String, Boolean, Date, ForeignKey
@@ -14,7 +14,7 @@ session = Session()
 
 Base = declarative_base()                      
 
-# Tabelas com suas colunas respequitivas referentes ao diagrama
+# Tabelas com suas colunas respeitando o diagrama
 class Cliente(Base):                           
     __tablename__ = 'clientes'
 
@@ -75,7 +75,7 @@ class Pedido(Base):
     devolucao = Column("Devolução", Date)
     cpf_cliente = Column("CPF_Cliente", ForeignKey("clientes.CPF"))
     id_jogo = Column("Id_Jogo", ForeignKey("jogos.Id_jogo"))
-    id_func = Column("Id_Funcionario", ForeignKey("Funcionarios.id_func"))
+    id_func = Column("Id_Funcionario", ForeignKey("funcionarios.id_func"))  # Corrigido para "funcionarios.id_func"
 
     def __init__(self, locacao, devolucao, cpf_cliente, id_jogo, id_func):
         self.locacao = locacao
@@ -96,9 +96,9 @@ class Endereco(Base):
         self.funcionario = funcionario
 
 
-# Parte de Funçoes de manipulação das informações
+# Parte de Funções de manipulação das informações
 
-# Função que adiciona funcionarios a locadora assim que inicia o sistema
+# Função que adiciona funcionarios à locadora assim que inicia o sistema
 def funcionarios_base():
     funcionarios_base = [
         Funcionario(id_func=1010, nome="Caique Diniz"),
@@ -133,7 +133,7 @@ def add_jogo():
     desenvolvedora = input("Digite a desenvolvedora do jogo: ").capitalize()
     preco = float(input("Digite o preço do jogo: "))
 
-    
+
     novo_jogo = Jogo(
         titulo=titulo,
         modelo_fisico=modelo_fisico,
@@ -154,7 +154,7 @@ def add_jogo():
 
 def prateleira_base():
     jogos_base = [
-        Jogo(titulo="Alladin", modelo_fisico="Cartucho", sistema="Snes",classificacao=10, genero="Aventura", desenvolvedora="Capcom", preco=10),
+        Jogo(titulo="Alladin", modelo_fisico="Cartucho", sistema="Snes", classificacao=10, genero="Aventura", desenvolvedora="Capcom", preco=10),
         Jogo(titulo="Banjo-Tooie", modelo_fisico="Cartucho", sistema="N64", classificacao=7, genero="Aventura", desenvolvedora="Rare", preco=20),
         Jogo(titulo="Black", modelo_fisico="Cd", sistema="Ps2", classificacao=18, genero="Fps", desenvolvedora="Criterion Games", preco=15),
         Jogo(titulo="Bully", modelo_fisico="Cd", sistema="Ps2", classificacao=14, genero="Aventura", desenvolvedora="Rockstar Games", preco=15),
@@ -355,39 +355,62 @@ def acesso():
             print("Por favor, insira um ID válido.")
 
 
-def alugar_jogo():
+def alugar_jogo(funcionario_ativo):
     listar_clientes()
+    sleep(1)
     cpf_cliente = input("Digite o CPF do Cliente (11 dígitos): ")
     
     if cpf_cliente.isdigit() and len(cpf_cliente) == 11:
         cliente = session.query(Cliente).filter_by(cpf=int(cpf_cliente)).first()
         if cliente:
-            jogos = session.query(Jogo).all()
-            for jogo in jogos:
+            jogos_alugados = []
+            total_valor = 0.0
+            sleep(1)
+            while True:
+                jogos = session.query(Jogo).all()
+                for jogo in jogos:
                     statusPrint = "Disponível" if jogo.status else "Indisponível"
                     print(f"ID|{jogo.id_jogo}|   Titulo: {jogo.titulo}   Sistema de uso: {jogo.sistema}   Status: {statusPrint}")
-            print(f"{'- -'*40}")
-            id_jogo = input("Digite o ID do jogo para aluguel: ")
-            
-            if id_jogo.isdigit():
-                jogo = session.query(Jogo).filter_by(id_jogo=int(id_jogo)).first()
-                if jogo and jogo.status:
-                    
-                    locacao = datetime.now().date()
-                    devolucao = locacao + timedelta(weeks=1)
+                print(f"{'- -' * 40}")
 
-                    novo_pedido = Pedido(locacao=locacao, devolucao=devolucao, cpf_cliente=cliente.cpf, id_jogo=jogo.id_jogo)
-                    session.add(novo_pedido)
-                    
-                    
-                    jogo.status = False
-                    session.commit()
+                id_jogo = input("Digite o ID do jogo para aluguel ou '0' para finalizar: ")
+                if id_jogo == '0':
+                    break
 
-                    print(f"Jogo {jogo.titulo} alugado para {cliente.nome} até {devolucao}.")
+                print("Processando . . .")
+                sleep(2)
+
+                if id_jogo.isdigit():
+                    jogo = session.query(Jogo).filter_by(id_jogo=int(id_jogo)).first()
+                    if jogo and jogo.status:
+                        locacao = datetime.now().date()
+                        devolucao = locacao + timedelta(weeks=1)
+
+                        novo_pedido = Pedido(locacao=locacao, devolucao=devolucao, cpf_cliente=cliente.cpf, id_jogo=jogo.id_jogo, id_func=funcionario_ativo.id_func)
+                        session.add(novo_pedido)
+
+                        jogo.status = False
+                        session.commit()
+
+                        jogos_alugados.append(jogo)
+                        total_valor += jogo.preco
+
+                        print(f"Jogo {jogo.titulo} Sistema: {jogo.sistema} alugado para {cliente.nome} até {devolucao}. Valor: R${jogo.preco}")
+                    else:
+                        print(f"Jogo {id_jogo} não disponível para aluguel.")
                 else:
-                    print(f"Jogo {id_jogo} não disponível para aluguel.")
+                    print("ID de jogo inválido!")
+            
+            if jogos_alugados:
+                print("Processando . . .")
+                sleep(3)
+                print("\nAlugados:")
+                print(f"{'- -' * 40}")
+                for jogo in jogos_alugados:
+                    print(f"- {jogo.titulo} -> {jogo.sistema} -> {jogo.modelo_fisico} -> R${jogo.preco}")
+                print(f"Total jogos reservados: {len(jogos_alugados)} Valor total R$: {total_valor:.2f}")
             else:
-                print("ID de jogo inválido!")
+                print("Nenhum jogo no pedido.")
         else:
             print("Cliente não encontrado!")
     else:
@@ -398,15 +421,19 @@ def alugar_jogo():
 def listar_pedidos():
     pedidos = session.query(Pedido).all()
     if len(pedidos) == 0:
+        print("Processando . . .")
+        sleep(2)
         print("Não há pedidos")
     else:
+        print("Processando. . .")
+        sleep(2)
         print("Lista de Pedidos:")
         print(f"{'- -'*40}")
         for pedido in pedidos:
             cliente = session.query(Cliente).filter_by(cpf=pedido.cpf_cliente).first()
             jogo = session.query(Jogo).filter_by(id_jogo=pedido.id_jogo).first()
             if cliente and jogo:
-                print(f"ID Pedido: {pedido.id_pedido}    Cliente: {cliente.nome}    Jogo: {jogo.titulo}    Devolução: {pedido.devolucao}")
+                print(f"ID Pedido: {pedido.id_pedido}    Cliente: {cliente.nome}    Jogo: {jogo.titulo}    Devolução: {pedido.devolucao}    Funcionario responsavel: {pedido.id_func}")
     os.system('pause')
 
 
@@ -427,7 +454,8 @@ def devolver_jogo():
                         print(f"ID Pedido: {pedido.id_pedido}    Jogo: {jogo.titulo}    Devolução: {pedido.devolucao}")
                 
                 id_pedido = input("Digite o ID do pedido que deseja devolver: ")
-                
+                print("Processando. . .")
+                sleep(2)
                 if id_pedido.isdigit():
                     pedido = session.query(Pedido).filter_by(id_pedido=int(id_pedido)).first()
                     if pedido:
@@ -436,8 +464,9 @@ def devolver_jogo():
                             jogo.status = True
                             session.delete(pedido)
                             session.commit()
-
-                            print(f"Jogo {jogo.titulo} devolvido com sucesso!")
+                            print("Aguarde. . .")
+                            sleep(2)
+                            print(f"Jogo: {jogo.titulo} Sistema: {jogo.sistema}    devolvido com sucesso!")
                         else:
                             print("Jogo não encontrado!")
                     else:
@@ -453,7 +482,7 @@ def devolver_jogo():
     os.system('pause')
 
 
-# Menu Principal de inicilisação de sistema
+# Menu Principal de inicialização de sistema
 def main(funcionario_ativo):
     while True:
         print(f"{10*'-='} L O C A D O R A {10*'=-'}")
@@ -481,7 +510,7 @@ def main(funcionario_ativo):
         elif opcao == "5":
             del_cliente()    
         elif opcao == "6":
-            alugar_jogo()
+            alugar_jogo(funcionario_ativo)
         elif opcao == "7":
             listar_pedidos()
         elif opcao == "8":
@@ -499,12 +528,11 @@ def main(funcionario_ativo):
             print(f"Opção Inválida, erro 202")
 
 
-# Função principal que inicia o banco e todo o sistem
+# Função principal que inicia o banco e todo o sistema
 if __name__ == "__main__":
     Base.metadata.create_all(bind=db)
     funcionarios_base()
     prateleira_base()
-    
     
     funcionario_ativo = acesso()
     if funcionario_ativo:

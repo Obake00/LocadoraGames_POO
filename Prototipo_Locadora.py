@@ -133,6 +133,7 @@ def add_jogo():
     desenvolvedora = input("Digite a desenvolvedora do jogo: ").capitalize()
     preco = float(input("Digite o preço do jogo: "))
 
+
     novo_jogo = Jogo(
         titulo=titulo,
         modelo_fisico=modelo_fisico,
@@ -362,32 +363,54 @@ def alugar_jogo(funcionario_ativo):
     if cpf_cliente.isdigit() and len(cpf_cliente) == 11:
         cliente = session.query(Cliente).filter_by(cpf=int(cpf_cliente)).first()
         if cliente:
-            jogos = session.query(Jogo).all()
-            for jogo in jogos:
-                statusPrint = "Disponível" if jogo.status else "Indisponível"
-                print(f"ID|{jogo.id_jogo}|   Titulo: {jogo.titulo}   Sistema de uso: {jogo.sistema}   Status: {statusPrint}")
-            print(f"{'- -'*40}")
-            id_jogo = input("Digite o ID do jogo para aluguel: ")
-            print("Processando . . .")
-            sleep(2)
-            if id_jogo.isdigit():
-                jogo = session.query(Jogo).filter_by(id_jogo=int(id_jogo)).first()
-                if jogo and jogo.status:
-                    
-                    locacao = datetime.now().date()
-                    devolucao = locacao + timedelta(weeks=1)
+            jogos_alugados = []
+            total_valor = 0.0
+            sleep(1)
+            while True:
+                jogos = session.query(Jogo).all()
+                for jogo in jogos:
+                    statusPrint = "Disponível" if jogo.status else "Indisponível"
+                    print(f"ID|{jogo.id_jogo}|   Titulo: {jogo.titulo}   Sistema de uso: {jogo.sistema}   Status: {statusPrint}")
+                print(f"{'- -' * 40}")
 
-                    novo_pedido = Pedido(locacao=locacao, devolucao=devolucao, cpf_cliente=cliente.cpf, id_jogo=jogo.id_jogo, id_func=funcionario_ativo.id_func)
-                    session.add(novo_pedido)
-                    
-                    jogo.status = False
-                    session.commit()
+                id_jogo = input("Digite o ID do jogo para aluguel ou '0' para finalizar: ")
+                if id_jogo == '0':
+                    break
 
-                    print(f"Jogo {jogo.titulo} Sistema: {jogo.sistema} alugado para {cliente.nome} até {devolucao} Valor R${jogo.preco}")
+                print("Processando . . .")
+                sleep(2)
+
+                if id_jogo.isdigit():
+                    jogo = session.query(Jogo).filter_by(id_jogo=int(id_jogo)).first()
+                    if jogo and jogo.status:
+                        locacao = datetime.now().date()
+                        devolucao = locacao + timedelta(weeks=1)
+
+                        novo_pedido = Pedido(locacao=locacao, devolucao=devolucao, cpf_cliente=cliente.cpf, id_jogo=jogo.id_jogo, id_func=funcionario_ativo.id_func)
+                        session.add(novo_pedido)
+
+                        jogo.status = False
+                        session.commit()
+
+                        jogos_alugados.append(jogo)
+                        total_valor += jogo.preco
+
+                        print(f"Jogo {jogo.titulo} Sistema: {jogo.sistema} alugado para {cliente.nome} até {devolucao}. Valor: R${jogo.preco}")
+                    else:
+                        print(f"Jogo {id_jogo} não disponível para aluguel.")
                 else:
-                    print(f"Jogo {id_jogo} não disponível para aluguel.")
+                    print("ID de jogo inválido!")
+            
+            if jogos_alugados:
+                print("Processando . . .")
+                sleep(3)
+                print("\nAlugados:")
+                print(f"{'- -' * 40}")
+                for jogo in jogos_alugados:
+                    print(f"- {jogo.titulo} -> {jogo.sistema} -> {jogo.modelo_fisico} -> R${jogo.preco}")
+                print(f"Total jogos reservados: {len(jogos_alugados)} Valor total R$: {total_valor:.2f}")
             else:
-                print("ID de jogo inválido!")
+                print("Nenhum jogo no pedido.")
         else:
             print("Cliente não encontrado!")
     else:
