@@ -482,7 +482,7 @@ def devolver_jogo():
     os.system('pause')
 
 
-# Menu Principal de inicialização de sistema
+# Menu Principal de inicialização de sistema!
 def main(funcionario_ativo):
     while True:
         print(f"{10*'-='} L O C A D O R A {10*'=-'}")
