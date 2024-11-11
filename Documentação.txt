@@ -1,31 +1,62 @@
 Configuração do Banco de Dados:
-1- O código usa SQLAlchemy para interagir com um banco de dados SQLite, definindo tabelas para Cliente, Jogo, Funcionario e Pedido.
+    O banco de dados é configurado com o SQLite e as tabelas são definidas usando o SQLAlchemy.
 
-2- Classes de Modelo:
 
-    Cliente: Representa os clientes da locadora, com atributos como CPF, nome, sexo e idade.
+Modelos de Dados:
+    1-Cliente: Armazena informações dos clientes, como CPF, nome, sexo e idade.
     
-    Jogo: Representa os jogos disponíveis para aluguel, incluindo título, modelo físico, sistema, classificação, gênero, 
+    2-Jogo: Contém detalhes dos jogos disponíveis para locação, incluindo título, modelo físico, sistema, classificação, gênero, desenvolvedora, preço e status (disponível ou não).
     
-    desenvolvedora, preço e status (disponível ou não).
+    3-Funcionário: Registra os funcionários da locadora, com ID, nome e estado de turno (ativo/inativo).
     
-    Funcionario: Representa os funcionários da locadora, com ID, nome e estado de turno (ativo/inativo).
+    4-Pedido: Representa as locações, associando clientes, jogos e funcionários.
     
-    Pedido: Representa os pedidos de aluguel, associando clientes, jogos e funcionários.
+    5-Endereço: Armazena informações de endereço relacionadas aos funcionários.
 
-3- Funções Principais:
-    
-    Adicionar Funcionários e Jogos: Funções para adicionar funcionários e jogos padrão ao iniciar o sistema.
-    
-    Listagem de Funcionários e Clientes: Permite visualizar todos os funcionários e clientes cadastrados.
-    
-    Adicionar e Deletar Clientes: Permite adicionar novos clientes ao sistema ou deletar clientes existentes.
-    
-    Aluguel e Devolução de Jogos: Funções para alugar jogos para clientes cadastrados e devolver jogos alugados, 
-    atualizando o status dos jogos e registrando pedidos.
-    
-    Listar Pedidos: Exibe todos os pedidos ativos no sistema.
 
-4- Menu Principal: Um menu interativo que permite ao usuário acessar diferentes funcionalidades do sistema, como alugar jogos, adicionar clientes, visualizar pedidos, etc.
+Funções Principais:
+    1-funcionarios_base(): Adiciona funcionários padrão ao sistema no início.
 
-5- Controle de Acesso: Implementa um sistema de login para funcionários, que muda seu estado de ativo/inativo.
+    2-listar_funcionarios(): Exibe todos os funcionários cadastrados.
+
+    3-add_jogo(): Permite a adição de novos jogos à locadora.
+
+    4-prateleira_base(): Adiciona jogos padrão ao banco de dados.
+
+    5-prateleira(): Mostra a lista de jogos disponíveis.
+
+    6-add_cliente(): Registra novos clientes.
+
+    7-listar_clientes(): Exibe todos os clientes cadastrados.
+
+    8-del_cliente(): Remove um cliente do sistema.
+
+    9-alugar_jogo(): Permite que um funcionário alugue jogos para um cliente.
+
+    10-listar_pedidos(): Mostra todos os pedidos de locação ativos.
+
+    11-atualizar_cliente(): Atualiza as informações de um cliente.
+
+    12-atualizar_funcionario(): Atualiza as informações de um funcionário.
+
+    13-devolver_jogo(): Permite a devolução de jogos alugados.
+
+
+Menus:
+    Menus interativos são implementados para gerenciar jogos, clientes e funcionários, permitindo que o usuário navegue pelas funcionalidades do sistema de forma intuitiva.
+
+
+Função Principal:
+    A função main() inicia o sistema de locadora, apresentando um menu ao usuário autenticado (funcionário) e gerenciando as operações conforme as escolhas feitas.
+
+
+Funcionalidades:
+    1-Autenticação de Funcionários: Permite que os funcionários façam login e gerenciem o sistema.
+
+    2-Gerenciamento de Clientes: Adição, listagem, atualização e exclusão de clientes.
+
+    3-Gerenciamento de Jogos: Adição, listagem e atualização do status dos jogos.
+
+    4-Processo de Locação: Permite que os funcionários aluguem jogos para clientes e registrem os pedidos.
+
+    5-Devolução de Jogos: Gerencia a devolução de jogos alugados, atualizando o status dos jogos e removendo pedidos do banco de dados.

@@ -111,7 +111,7 @@ def listar_funcionarios():
     print(f"{'- -'*40}")
     for funcionario in funcionarios:
         print(f"ID: {funcionario.id_func}      Funcionario: {funcionario.nome}")
-    os.system('pause')
+    print(f"{'- -'*40}")
 
 # Função que adiciona jogos a prateleira, jogos com o mesmo nome, nao entram
 def add_jogo():
@@ -201,7 +201,7 @@ def acesso():
     listar_funcionarios()
 
     while True:
-        id_func = input("Use ID para login: ")
+        id_func = input("\nUse ID para login: ")
         
         if id_func.isdigit():
             id_func = int(id_func)
