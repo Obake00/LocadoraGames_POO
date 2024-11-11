@@ -1,36 +1,31 @@
-Documentação:
+Configuração do Banco de Dados:
+1- O código usa SQLAlchemy para interagir com um banco de dados SQLite, definindo tabelas para Cliente, Jogo, Funcionario e Pedido.
 
-1-UML:
-Entidades e atributos:
-	
-Entidade: Cliente...............(tabela referente totos o dados do cliente)
-Atributos: 1- Cpf...............(Indentificador unico / PK)
-           2- Nome..............(P.Nome=Primeiro nome / S.nome=Sobrenome do cliente)
-           3- Data_nascimento...(Data de nascimento do cliente)
-		   
-Entidade: Jogo.................(Tabela referente a todos os dados do jogo)
-Atributos: 1- Id_jogo..........(Indentificador unico / PK)
-           2- Titulo...........(Titulo / nome do jogo)
-           3- Estado_fisico....(Tipo e/ou formato fisico onde a midia esta alocada)
-           4- Sistema..........(SO no qual a midia é reproduzida)
-           5- Classificação....(Classificação de faixa etaria do jogo)
-           6- Genero...........(Tipo e/ou categoria na qual o jogo se enquadra)
-           7- Desenvolvedora...(Empresa responsavel pela produção do jogo)
-           8- Preço............(Valor estipulado pela locadora para a locação)
-           9- Estado_aluguel...(Estado de disponibilidade do jogo na loja)
-			
-Entidade: Funcionario...........(Tabela referente a todos os dados dos Funcionarios)
-Atributos: 1- Id_func..........(Identificador unico / PK)
-           2- Nome.............(P.Nome=Primeiro nome / S.nome=Sobrenome do funcionario)
-           3- Turno............(Periodo no qual o funcionario trabalha na loja)
-           4- Data_nascimento..(Data de nascimento do funcionario)
+2- Classes de Modelo:
 
-			
-Entidade: Pedido................(Tabela referente ao dados de locação e devolução dos jogos)
-Atributos: 1- Id_pedido.........(Identificador unico / PK)
-           2- Datas.............(Locação = Data de saida do jogo na locadora / Devolução = Data de retorno do jogo na locadora)
+    Cliente: Representa os clientes da locadora, com atributos como CPF, nome, sexo e idade.
+    
+    Jogo: Representa os jogos disponíveis para aluguel, incluindo título, modelo físico, sistema, classificação, gênero, 
+    
+    desenvolvedora, preço e status (disponível ou não).
+    
+    Funcionario: Representa os funcionários da locadora, com ID, nome e estado de turno (ativo/inativo).
+    
+    Pedido: Representa os pedidos de aluguel, associando clientes, jogos e funcionários.
 
+3- Funções Principais:
+    
+    Adicionar Funcionários e Jogos: Funções para adicionar funcionários e jogos padrão ao iniciar o sistema.
+    
+    Listagem de Funcionários e Clientes: Permite visualizar todos os funcionários e clientes cadastrados.
+    
+    Adicionar e Deletar Clientes: Permite adicionar novos clientes ao sistema ou deletar clientes existentes.
+    
+    Aluguel e Devolução de Jogos: Funções para alugar jogos para clientes cadastrados e devolver jogos alugados, 
+    atualizando o status dos jogos e registrando pedidos.
+    
+    Listar Pedidos: Exibe todos os pedidos ativos no sistema.
 
-Relacionamentos:
-           1- ATENDE............(Ligação entre as entidades: "Cliente" e "Funcionario") Cardinalidade..(N - 1)
-           2- RESERVA...........(Ligação entre "Cliente", "Pedido" e "Jogo") Cardinalidade ..(N - N)
+4- Menu Principal: Um menu interativo que permite ao usuário acessar diferentes funcionalidades do sistema, como alugar jogos, adicionar clientes, visualizar pedidos, etc.
+
+5- Controle de Acesso: Implementa um sistema de login para funcionários, que muda seu estado de ativo/inativo.
