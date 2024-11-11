@@ -111,6 +111,7 @@ def listar_funcionarios():
     print(f"{'- -'*40}")
     for funcionario in funcionarios:
         print(f"ID: {funcionario.id_func}      Funcionario: {funcionario.nome}")
+    os.system('pause')
 
 # Função que adiciona jogos a prateleira, jogos com o mesmo nome, nao entram
 def add_jogo():
@@ -179,6 +180,51 @@ def prateleira_base():
             session.add(jogo)
 
     session.commit()
+
+
+def clientes_base():
+    clientes_base = [
+        Cliente(cpf="12345678910", nome="Joaquim", sexo="M", idade=21),
+        Cliente(cpf="23456789011", nome="Maria", sexo="F", idade=24),
+        Cliente(cpf="34567890122", nome="Carlos", sexo="F", idade=18),
+        Cliente(cpf="45678901233", nome="Bernadete", sexo="M", idade=20)
+    ]
+    for cliente in clientes_base:
+        existente = session.query(Cliente).filter_by(cpf=cliente.cpf).first()
+        if not existente:
+            session.add(cliente)
+
+    session.commit()
+
+# Função de login dos funcionarios, muda o estado do funcionario para "ativo", e quando encerra muda o estado para "inativo", so e acessado por funcionarios ja no sistema.
+def acesso():
+    listar_funcionarios()
+
+    while True:
+        id_func = input("Use ID para login: ")
+        
+        if id_func.isdigit():
+            id_func = int(id_func)
+            funcionario = session.query(Funcionario).filter_by(id_func=id_func).first()
+            if funcionario:
+                if not funcionario.turno:
+                    funcionario.turno = True
+                    session.commit()
+                    print("Acessando. . .")
+                    sleep(2)
+                    print(f"Acesso concedido! Bem-vindo: {funcionario.nome}  -> TURNO ATIVO")
+                    sleep(2)
+                    return funcionario
+                else:
+                    print("Finalizando seu turno....")
+                    sleep(2)
+                    print(f"Tenha um ótimo descanso {funcionario.nome}!")
+                    funcionario.turno = False
+                    session.commit()
+            else:
+                print("ID inválido!")
+        else:
+            print("Por favor, insira um ID válido.")
 
 # Função mostrar todos os jogos no banco, com opção por filtro de Cd e Cartucho
 def prateleira():
@@ -292,7 +338,7 @@ def listar_clientes():
         print("Processando. . .")
         sleep(2)
         print("Não há clientes no Sistema!!")
-        os.system('pause')
+        os.system('pause') #os.system('pause') é uma funcao do python para pausar o codigo até o usuario pressionar uma tecla
     else:
         print(f"Total de Clientes no Sistema: {len(clientes)}")
         print("-"*56)
@@ -300,6 +346,42 @@ def listar_clientes():
             print(f"- {cliente.nome} (CPF: {cliente.cpf})")
         os.system('pause')
 
+
+def atualizar_cliente():
+    listar_clientes()
+    cpf = input("Digite o CPF do Cliente a ser atualizado: ")
+    
+    if cpf.isdigit() and len(cpf) == 11:
+        cliente = session.query(Cliente).filter_by(cpf=int(cpf)).first()
+        
+        if cliente:
+            print(f"Dados atuais de {cliente.nome}:")
+            print(f"Nome: {cliente.nome}")
+            print(f"Sexo: {cliente.sexo}")
+            print(f"Idade: {cliente.idade}")
+            
+            
+            novo_nome = input("Digite novo Nome (ENTER para manter atual): ").capitalize()
+            if novo_nome:
+                cliente.nome = novo_nome
+            
+            novo_sexo = input("Digite novo sexo (ENTER para manter atual): ").capitalize()
+            if novo_sexo:
+                cliente.sexo = novo_sexo
+            
+            nova_idade = input("Digite nova idade (ENTER para manter atual): ")
+            if nova_idade.isdigit():
+                cliente.idade = int(nova_idade)
+
+            session.commit()
+            print("Dados atualizados com sucesso!")
+            print(f" Nome: {cliente.nome} Idade: {cliente.idade} Sexo: {cliente.sexo}")
+        else:
+            print("Cliente não encontrado!")
+    else:
+        print("CPF inválido! O CPF deve conter 11 dígitos, somente números.")
+
+    os.system('pause')
 # Deleta o Cliente no sistema
 def del_cliente():
     cpf = input("CPF do Cliente a ser deletado (11 dígitos): ")
@@ -316,32 +398,28 @@ def del_cliente():
     else:
         print("CPF inválido! O CPF deve ter exatamente 11 dígitos e ser um número.")
 
-# Função de login dos funcionarios, muda o estado do funcionario para "ativo", e quando encerra muda o estado para "inativo", so e acessado por funcionarios ja no sistema.
-def acesso():
+def atualizar_funcionario():
     listar_funcionarios()
-
-    while True:
-        id_func = input("Use ID para login: ")
+    sleep(2)
+    id_func = input("Use ID do funcionario a ser atualizado: ")
+    if id_func.isdigit():
+        id_func = int(id_func)
+        funcionario = session.query(Funcionario).filter_by(id_func=id_func).first()
         
-        if id_func.isdigit():
-            id_func = int(id_func)
-            funcionario = session.query(Funcionario).filter_by(id_func=id_func).first()
-            if funcionario:
-                if not funcionario.turno:
-                    funcionario.turno = True
-                    session.commit()
-                    print("Acessando. . .")
-                    sleep(2)
-                    print(f"Acesso concedido! Bem-vindo: {funcionario.nome}  -> TURNO ATIVO")
-                    sleep(2)
-                    return funcionario
-                else:
-                    print("Esse funcionário já está ATIVO.")
-                    return None
-            else:
-                print("ID inválido!")
+        if funcionario:
+            print(f"Nome: {funcionario.nome}")
+            print(f"ID: {funcionario.id_func}")
+
+            novo_nome = input("Digite o novo nome do funcionario (ENTER para manter o nome atual): ").capitalize()
+            if novo_nome:
+                funcionario.nome = novo_nome
+            session.commit()
+            print("Dados atualizados com sucesso!")
+            print(f" Nome: {funcionario.nome} ID: {funcionario.id_func}")  
         else:
-            print("Por favor, insira um ID válido.")
+            print("Usuario não encontrado!")
+    else:
+        print("ID inválido! O ID deve ser um número.")
 
 # Adiciona um jogo a tabela aluguel
 def alugar_jogo(funcionario_ativo):
@@ -471,19 +549,24 @@ def devolver_jogo():
     os.system('pause')
 
 
-# Menu Principal de inicialização de sistema!
+#Menu Principal de inicialização de sistema!
 def main(funcionario_ativo):
     while True:
         print(f"{10*'-='} L O C A D O R A {10*'=-'}")
         print(f"{'- -'*40}")
         print("[1] - Prateleira de jogos")
         print("[2] - Adicionar Jogo")
-        print("[3] - Adicionar Cliente")
-        print("[4] - Clientes no Sistema")
-        print("[5] - Excluir Cliente")
-        print("[6] - Alugar Jogos")
-        print("[7] - Lista de Pedidos")
-        print("[8] - Devolver Jogo")
+        print("[3] - Alugar Jogos")
+        print("[4] - Devolver Jogo")
+        print("[5] - Lista de Pedidos")
+        print("[6] - Adicionar cliente")
+        print("[7] - Excluir cliente")
+        print("[8] - Cliente no sistema")
+        print("[9] - Atualizar Cliente")
+        print("[10]- Lista de Funcionários")
+        print("[11]- Atualizar Funcionário")
+        print("[12]- Adicionar Funcionario")
+        print("[13]- Excluir Funcionario")
         print("[0] - Encerrar Sistema")
         print(f"{'- -'*40}")
 
@@ -493,17 +576,23 @@ def main(funcionario_ativo):
         elif opcao == "2":
             add_jogo()
         elif opcao == "3":
-            add_cliente()
+            alugar_jogo(funcionario_ativo)
         elif opcao == "4":
             listar_clientes()
         elif opcao == "5":
             del_cliente()    
         elif opcao == "6":
-            alugar_jogo(funcionario_ativo)
+            add_cliente
         elif opcao == "7":
             listar_pedidos()
         elif opcao == "8":
             devolver_jogo()
+        elif opcao == "9":
+            atualizar_cliente()
+        elif opcao == "10":
+            listar_funcionarios()
+        elif opcao == "11":
+            atualizar_funcionario()
         elif opcao == "0":  
             funcionario_ativo.turno = False
             session.commit()
@@ -517,11 +606,12 @@ def main(funcionario_ativo):
             print(f"Opção Inválida, erro 202")
 
 
-# Função principal que inicia o banco e todo o sistema
+#Função principal que inicia o banco e todo o sistema
 if __name__ == "__main__":
-    Base.metadata.create_all(bind=db)
+    Base.metadata.create_all(bind=db) # Cria as tabelas declaradas no banco, sem esse comando, nenhuma tabela seria criada
     funcionarios_base()
     prateleira_base()
+    clientes_base()
     
     funcionario_ativo = acesso()
     if funcionario_ativo:
