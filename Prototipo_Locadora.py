@@ -382,7 +382,7 @@ def atualizar_cliente():
         print("CPF inválido! O CPF deve conter 11 dígitos, somente números.")
 
     os.system('pause')
-# Deleta o Cliente no sistema
+# Deleta o Cliente no sistema atraves do CPF
 def del_cliente():
     cpf = input("CPF do Cliente a ser deletado (11 dígitos): ")
     
@@ -397,7 +397,7 @@ def del_cliente():
             print("Cliente não encontrado!")
     else:
         print("CPF inválido! O CPF deve ter exatamente 11 dígitos e ser um número.")
-
+# Atualiza o Funcionario no sistema atraves do ID 
 def atualizar_funcionario():
     listar_funcionarios()
     sleep(2)
@@ -413,7 +413,11 @@ def atualizar_funcionario():
             novo_nome = input("Digite o novo nome do funcionario (ENTER para manter o nome atual): ").capitalize()
             if novo_nome:
                 funcionario.nome = novo_nome
+            novo_id = input("Digite o novo ID do funcionario (ENTER para manter o ID atual): ")
+            if novo_id.isdigit():
+                funcionario.id_func = int(novo_id)
             session.commit()
+
             print("Dados atualizados com sucesso!")
             print(f" Nome: {funcionario.nome} ID: {funcionario.id_func}")  
         else:
@@ -483,6 +487,37 @@ def alugar_jogo(funcionario_ativo):
     else:
         print("CPF inválido! O CPF deve conter 11 dígitos, somente números.")
     os.system('pause')
+
+# Exclui um funcionario da tabela *Funcionario* a partir do ID do digitado
+def excluir_funcionario():
+    listar_funcionarios()
+    sleep(2)
+    id_func = input("Use ID do funcionario a ser excluido: ")
+    if id_func.isdigit():
+        id_func = int(id_func)
+        funcionario = session.query(Funcionario).filter_by(id_func=id_func).first()
+        if funcionario:
+            print(f" Nome: {funcionario.nome} ID: {funcionario.id_func}")  
+            session.delete(funcionario)
+            print(f"Funcionario excluído com sucesso!")
+            session.commit()
+        else:
+            print("Funcionario nao encontrado!")
+    else:
+        print("ID inválido! O ID deve ser um número.")
+
+def adicionar_funcionario():
+    listar_funcionarios()
+    sleep(2)
+    id_nome = input("Digite o nome do funcionario: ").capitalize()
+    senha = input("Digite o ID do funcionario: ")
+
+    novo_funcionario = Funcionario(
+                nome=id_nome,
+                id_func=senha
+            )
+    session.add(novo_funcionario)
+    session.commit()
 
 
 def listar_pedidos():
@@ -566,7 +601,7 @@ def main(funcionario_ativo):
         print("[10]- Lista de Funcionários")
         print("[11]- Atualizar Funcionário")
         print("[12]- Adicionar Funcionario")
-        print("[13]- Excluir Funcionario")
+        print("[13]- Demitir Funcionario")
         print("[0] - Encerrar Sistema")
         print(f"{'- -'*40}")
 
@@ -578,21 +613,26 @@ def main(funcionario_ativo):
         elif opcao == "3":
             alugar_jogo(funcionario_ativo)
         elif opcao == "4":
-            listar_clientes()
+            devolver_jogo()
         elif opcao == "5":
-            del_cliente()    
+            listar_pedidos()  
         elif opcao == "6":
             add_cliente
         elif opcao == "7":
-            listar_pedidos()
+            del_cliente()
         elif opcao == "8":
-            devolver_jogo()
+            listar_clientes()
         elif opcao == "9":
             atualizar_cliente()
         elif opcao == "10":
             listar_funcionarios()
         elif opcao == "11":
             atualizar_funcionario()
+        elif opcao == "12":
+            adicionar_funcionario()
+        elif opcao == "13":
+            excluir_funcionario()
+
         elif opcao == "0":  
             funcionario_ativo.turno = False
             session.commit()
