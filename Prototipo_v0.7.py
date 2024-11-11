@@ -348,7 +348,7 @@ def acesso():
                     return funcionario
                 else:
                     print("Esse funcionário já está ATIVO.")
-                    return None
+                
             else:
                 print("ID inválido!")
         else:
@@ -436,6 +436,64 @@ def listar_pedidos():
                 print(f"ID Pedido: {pedido.id_pedido}    Cliente: {cliente.nome}    Jogo: {jogo.titulo}    Devolução: {pedido.devolucao}    Funcionario responsavel: {pedido.id_func}")
     os.system('pause')
 
+def atualizar_cliente():
+    listar_clientes()
+    cpf = input("Digite o CPF do Cliente a ser atualizado: ")
+    
+    if cpf.isdigit() and len(cpf) == 11:
+        cliente = session.query(Cliente).filter_by(cpf=int(cpf)).first()
+        
+        if cliente:
+            print(f"Dados atuais de {cliente.nome}:")
+            print(f"Nome: {cliente.nome}")
+            print(f"Sexo: {cliente.sexo}")
+            print(f"Idade: {cliente.idade}")
+            
+            
+            novo_nome = input("Digite novo Nome (ENTER para manter atual): ").capitalize()
+            if novo_nome:
+                cliente.nome = novo_nome
+            
+            novo_sexo = input("Digite novo sexo (ENTER para manter atual): ").capitalize()
+            if novo_sexo:
+                cliente.sexo = novo_sexo
+            
+            nova_idade = input("Digite nova idade (ENTER para manter atual): ")
+            if nova_idade.isdigit():
+                cliente.idade = int(nova_idade)
+
+            session.commit()
+            print("Dados atualizados com sucesso!")
+            print(f" Nome: {cliente.nome} Idade: {cliente.idade} Sexo: {cliente.sexo}")
+        else:
+            print("Cliente não encontrado!")
+    else:
+        print("CPF inválido! O CPF deve conter 11 dígitos, somente números.")
+
+    os.system('pause')
+
+def atualizar_funcionario():
+    listar_funcionarios()
+    sleep(2)
+    id_func = input("Use ID do funcionario a ser atualizado: ")
+    if id_func.isdigit():
+        id_func = int(id_func)
+        funcionario = session.query(Funcionario).filter_by(id_func=id_func).first()
+        
+        if funcionario:
+            print(f"Nome: {funcionario.nome}")
+            print(f"ID: {funcionario.id_func}")
+
+            novo_nome = input("Digite o novo nome do funcionario (ENTER para manter o nome atual): ").capitalize()
+            if novo_nome:
+                funcionario.nome = novo_nome
+            session.commit()
+            print("Dados atualizados com sucesso!")
+            print(f" Nome: {funcionario.nome} ID: {funcionario.id_func}")  
+        else:
+            print("Usuario não encontrado!")
+    else:
+        print("ID inválido! O ID deve ser um número.")
 
 def devolver_jogo():
     listar_clientes()
@@ -482,39 +540,99 @@ def devolver_jogo():
     os.system('pause')
 
 
+
+def menu_jogo():
+    while True:
+        print(f"{10*'-='} J O G O S {10*'=-'}")
+        print("[1] - Prateleira de Jogos")
+        print("[2] - Adicionar Jogo")
+        print("[0] - Menu Principal")
+
+        mj = input("DIGITE OPÇÃO: ")
+        if mj == "1":
+            prateleira()
+        elif mj == "2":
+            add_jogo()
+        elif mj == "0":
+            break
+        else:
+            print("Opção inválida!")
+
+
+
+def menu_cliente():
+    while True:
+        print(f"{10*'-='} C L I E N T E S {10*'=-'}")
+        print("[1] - Clientes no Sistema")
+        print("[2] - Adicionar Cliente")
+        print("[3] - Excluir Cliente")
+        print("[4] - Atualizar dados Cliente")
+        print("[0] - Menu Principal")
+
+        mc = input("DIGITE OPÇÃO: ")
+        if mc == "1":
+            listar_clientes()    
+        elif mc == "2":
+            add_cliente()
+        elif mc == "3":
+            del_cliente()
+        elif mc == "4":
+            atualizar_cliente()
+        elif mc == "0":
+            break
+        else:
+            print("Opção inválida!")
+
+
+def menu_funcionario():
+    while True:
+        print(f"{10*'-='} F U N C I O N A R I O S {10*'=-'}")
+        print("[1] - Funcionarios no Sistema")
+        print("[2] - Atualizar dados Funcionario")
+        print("[3] - Adicionar Funcionario")
+        print("[4] - Excluir Funcionario")
+        print("[0] - Menu Principal")
+
+        mf = input("DIGITE OPÇÃO: ")
+        if mf == "1":
+            listar_funcionarios()    
+        elif mf == "2":
+            atualizar_funcionario()
+        elif mf == "3":
+            pass
+        elif mf == "4":
+            pass
+        elif mf == "0":
+            break
+        else:
+            print("Opção inválida!")
 # Menu Principal de inicialização de sistema
 def main(funcionario_ativo):
     while True:
         print(f"{10*'-='} L O C A D O R A {10*'=-'}")
         print(f"{'- -'*40}")
-        print("[1] - Prateleira de jogos")
-        print("[2] - Adicionar Jogo")
-        print("[3] - Adicionar Cliente")
-        print("[4] - Clientes no Sistema")
-        print("[5] - Excluir Cliente")
-        print("[6] - Alugar Jogos")
-        print("[7] - Lista de Pedidos")
-        print("[8] - Devolver Jogo")
+        print("[1] - Jogos")
+        print("[2] - Clientes")
+        print("[3] - Lista de Pedidos")
+        print("[4] - Alugar Jogos")
+        print("[5] - Devolver Jogo")
+        print("[6] - Funcionários")
         print("[0] - Encerrar Sistema")
         print(f"{'- -'*40}")
 
         opcao = input("DIGITE OPÇÃO: ")
         if opcao == "1":
-            prateleira()
+            menu_jogo()
         elif opcao == "2":
-            add_jogo()
+            menu_cliente()
         elif opcao == "3":
-            add_cliente()
-        elif opcao == "4":
-            listar_clientes()
-        elif opcao == "5":
-            del_cliente()    
-        elif opcao == "6":
-            alugar_jogo(funcionario_ativo)
-        elif opcao == "7":
             listar_pedidos()
-        elif opcao == "8":
-            devolver_jogo()
+        elif opcao == "4":
+            alugar_jogo(funcionario_ativo)
+        elif opcao == "5":
+            devolver_jogo()    
+        elif opcao == "6":
+            menu_funcionario()
         elif opcao == "0":  
             funcionario_ativo.turno = False
             session.commit()
