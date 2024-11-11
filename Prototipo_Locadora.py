@@ -75,7 +75,7 @@ class Pedido(Base):
     devolucao = Column("Devolução", Date)
     cpf_cliente = Column("CPF_Cliente", ForeignKey("clientes.CPF"))
     id_jogo = Column("Id_Jogo", ForeignKey("jogos.Id_jogo"))
-    id_func = Column("Id_Funcionario", ForeignKey("funcionarios.id_func"))  # Corrigido para "funcionarios.id_func"
+    id_func = Column("Id_Funcionario", ForeignKey("funcionarios.id_func"))
 
     def __init__(self, locacao, devolucao, cpf_cliente, id_jogo, id_func):
         self.locacao = locacao
@@ -83,17 +83,6 @@ class Pedido(Base):
         self.cpf_cliente = cpf_cliente
         self.id_jogo = id_jogo
         self.id_func = id_func
-
-
-class Endereco(Base):
-    __tablename__ = 'enderecos'
-
-    cep = Column("Cep", Integer, primary_key=True)
-    funcionario = Column("Funcionario", ForeignKey("funcionarios.id_func"))
-
-    def __init__(self, cep, funcionario):
-        self.cep = cep
-        self.funcionario = funcionario
 
 
 # Parte de Funções de manipulação das informações
