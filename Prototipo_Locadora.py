@@ -14,7 +14,7 @@ session = Session()
 
 Base = declarative_base()                      
 
-# Tabelas com suas colunas respeitando o diagrama
+# Tabela referente aos Clientes
 class Cliente(Base):                           
     __tablename__ = 'clientes'
 
@@ -29,7 +29,7 @@ class Cliente(Base):
         self.sexo = sexo
         self.idade = idade
 
-
+# Tabela referente ao cadastro dos jogos
 class Jogo(Base):
     __tablename__ = 'jogos'
 
@@ -53,7 +53,7 @@ class Jogo(Base):
         self.preco = preco
         self.status = status
 
-
+# Tabela referente aos Funcionarios
 class Funcionario(Base):
     __tablename__ = 'funcionarios'
 
@@ -66,7 +66,7 @@ class Funcionario(Base):
         self.nome = nome
         self.turno = turno
 
-
+# Tabela referente aos Pedidos realizados pelos clientes para com os funcionarios
 class Pedido(Base):
     __tablename__ = 'pedidos'
 
@@ -104,7 +104,7 @@ def funcionarios_base():
     print("Iniciando. . . ")
     sleep(2)
 
-
+# Função retorna os funcionarios no sistema( funcionarios ja definidos)
 def listar_funcionarios():
     funcionarios = session.query(Funcionario).all()
     print("Lista de Funcionários:")
@@ -112,7 +112,7 @@ def listar_funcionarios():
     for funcionario in funcionarios:
         print(f"ID: {funcionario.id_func}      Funcionario: {funcionario.nome}")
 
-
+# Função que adiciona jogos a prateleira, jogos com o mesmo nome, nao entram
 def add_jogo():
     titulo = input("Digite o título do jogo: ").capitalize()
     modelo_fisico = input("Digite o modelo físico do jogo: ").capitalize()
@@ -140,7 +140,7 @@ def add_jogo():
     print(f"O jogo '{titulo}' foi adicionado à estante!")
     os.system('pause')
 
-
+# Jogos ja pre definidos no sistema, quando iniciado o banco a lista ja é instanciado
 def prateleira_base():
     jogos_base = [
         Jogo(titulo="Alladin", modelo_fisico="Cartucho", sistema="Snes", classificacao=10, genero="Aventura", desenvolvedora="Capcom", preco=10),
@@ -180,7 +180,7 @@ def prateleira_base():
 
     session.commit()
 
-
+# Função mostrar todos os jogos no banco, com opção por filtro de Cd e Cartucho
 def prateleira():
     while True:
         print("Escolha uma opção:")
@@ -250,7 +250,7 @@ def prateleira():
         else:
             print("Opção inválida! Tente novamente.")
 
-
+# Adiciona Clientes ao Sistema, um jogo so pode ser alugado por clientes ja cadastrados
 def add_cliente():
     while True:
         cpf = input("Digite o CPF do Cliente (11 dígitos): ")
@@ -285,7 +285,7 @@ def add_cliente():
             print("CPF inválido! O CPF deve conter 11 dígitos, somente números.")
     os.system('pause')
 
-
+# Lista os clientes no sistema para pesquisa
 def listar_clientes():
     clientes = session.query(Cliente).all()
     if len(clientes) == 0:
@@ -300,7 +300,7 @@ def listar_clientes():
             print(f"- {cliente.nome} (CPF: {cliente.cpf})")
         os.system('pause')
 
-
+# Deleta o Cliente no sistema
 def del_cliente():
     cpf = input("CPF do Cliente a ser deletado (11 dígitos): ")
     
@@ -316,7 +316,7 @@ def del_cliente():
     else:
         print("CPF inválido! O CPF deve ter exatamente 11 dígitos e ser um número.")
 
-
+# Função de login dos funcionarios, muda o estado do funcionario para "ativo", e quando encerra muda o estado para "inativo", so e acessado por funcionarios ja no sistema.
 def acesso():
     listar_funcionarios()
 
@@ -343,7 +343,7 @@ def acesso():
         else:
             print("Por favor, insira um ID válido.")
 
-
+# Adiciona um jogo a tabela aluguel
 def alugar_jogo(funcionario_ativo):
     listar_clientes()
     sleep(1)
@@ -425,7 +425,7 @@ def listar_pedidos():
                 print(f"ID Pedido: {pedido.id_pedido}    Cliente: {cliente.nome}    Jogo: {jogo.titulo}    Devolução: {pedido.devolucao}    Funcionario responsavel: {pedido.id_func}")
     os.system('pause')
 
-
+# deleta o pedido da tabela
 def devolver_jogo():
     listar_clientes()
     cpf_cliente = input("Digite o CPF do Cliente (11 dígitos): ")
