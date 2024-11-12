@@ -689,7 +689,6 @@ def main(funcionario_ativo):
         else:
             print(f"Opção Inválida, erro 202")
 
-
 # Função principal que inicia o banco e todo o sistema
 if __name__ == "__main__":
     Base.metadata.create_all(bind=db)
