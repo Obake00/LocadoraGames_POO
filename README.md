@@ -10,7 +10,6 @@ Funcionário: Registra dados dos funcionários, como ID, nome e estado de turno 
 
 Pedido: Representa locações, associando clientes, jogos e funcionários.
 
-=======
 Jogo: Contém informações sobre jogos, incluindo título, modelo físico, sistema, classificação, gênero, desenvolvedora, preço e status.
 
 Funcionário: Registra dados dos funcionários, como ID, nome e estado de turno (ativo/inativo).
