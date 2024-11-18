@@ -10,6 +10,13 @@ Funcionário: Registra dados dos funcionários, como ID, nome e estado de turno 
 
 Pedido: Representa locações, associando clientes, jogos e funcionários.
 
+=======
+Jogo: Contém informações sobre jogos, incluindo título, modelo físico, sistema, classificação, gênero, desenvolvedora, preço e status.
+
+Funcionário: Registra dados dos funcionários, como ID, nome e estado de turno (ativo/inativo).
+
+Pedido: Representa locações, associando clientes, jogos e funcionários.
+
 Endereço: Armazena informações de endereço dos funcionários.
 As principais funções do sistema incluem adicionar e listar funcionários e jogos, registrar e gerenciar clientes, processar locações e devoluções de jogos. Menus interativos facilitam a navegação entre essas funcionalidades.
 
